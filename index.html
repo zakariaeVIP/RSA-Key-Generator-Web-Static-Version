@@ -2,195 +2,636 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Générateur de clés RSA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de clés RSA Professional</title>
     <style>
+        :root {
+            --primary-color: #3f51b5;
+            --primary-dark: #303f9f;
+            --accent-color: #ff4081;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --success-color: #4caf50;
+            --error-color: #f44336;
+            --info-bg: #e3f2fd;
+            --card-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
         body {
-            font-family: 'Segoe UI', sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f0f0f0;
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-
+        
         .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-
-        .input-section {
-            margin-bottom: 20px;
-        }
-
-        input {
-            padding: 8px;
-            margin: 5px;
-            width: 100px;
-        }
-
-        button {
-            background: #4CAF50;
+        
+        header {
+            background-color: var(--primary-color);
             color: white;
-            padding: 10px 20px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            box-shadow: var(--card-shadow);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 500;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+        
+        main {
+            background: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+        }
+        
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
             border: none;
             border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
             cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        button:hover {
-            background: #45a049;
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
         }
-
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
         .result-section {
-            margin: 20px 0;
+            margin-top: 2rem;
         }
-
+        
+        .key-display {
+            background-color: var(--info-bg);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid var(--primary-color);
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem 0;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
         .explanation {
-            background: #fff9e6;
-            padding: 15px;
-            border-left: 4px solid #ffeb3b;
-            white-space: pre-wrap;
-            font-family: monospace;
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            line-height: 1.6;
             max-height: 400px;
             overflow-y: auto;
+            border: 1px solid #eee;
         }
-
-        .key-display {
-            background: #e8f5e9;
-            padding: 10px;
-            margin: 10px 0;
+        
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            padding: 1rem;
             border-radius: 4px;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .alert-error {
+            background-color: #ffebee;
+            color: var(--error-color);
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .alert-success {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        .simple-explanation {
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .simple-explanation h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-content h5 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+        
+        .analogy {
+            background-color: #fffde7;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border-left: 4px solid #ffd600;
+        }
+        
+        .analogy-title {
+            font-weight: bold;
+            color: #f57f17;
+            margin-bottom: 0.5rem;
+        }
+        
+        .interactive-demo {
+            background-color: #e8f5e9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .input-group {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Générateur de clés RSA</h1>
+        <header>
+            <h1>Générateur de clés RSA</h1>
+            <div class="subtitle">Générez des paires de clés de chiffrement asymétriques sécurisées</div>
+        </header>
         
-        <div class="input-section">
-            <label>Nombre premier p: <input type="number" id="p"></label>
-            <label>Nombre premier q: <input type="number" id="q"></label>
-            <button onclick="generateKeys()">Générer les clés</button>
-        </div>
-
-        <div class="result-section">
-            <h3>Clé publique (e, n):</h3>
-            <div class="key-display" id="publicKey"></div>
+        <main>
+            <div class="card">
+                <div class="card-header">Qu'est-ce que RSA?</div>
+                <div class="card-body">
+                    <div class="simple-explanation">
+                        <h4>RSA simplifié</h4>
+                        <p>Le chiffrement RSA est comme une boîte avec un cadenas spécial qui peut être verrouillé par n'importe qui, mais seul le propriétaire peut l'ouvrir.</p>
+                        
+                        <div class="analogy">
+                            <div class="analogy-title">Analogie simple</div>
+                            <p>Imaginez un coffre-fort avec deux clés différentes :</p>
+                            <ul>
+                                <li><strong>Clé publique</strong> : Comme un cadenas ouvert que vous distribuez à tout le monde. N'importe qui peut y mettre un message et le fermer.</li>
+                                <li><strong>Clé privée</strong> : La seule clé qui peut ouvrir ce cadenas une fois fermé. Vous la gardez secrète.</li>
+                            </ul>
+                        </div>
+                        
+                        <p>RSA utilise les mathématiques pour créer ces deux clés liées, basées sur des nombres premiers.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Pourquoi utiliser des nombres premiers?</h5>
+                            <p>Les nombres premiers sont la base de la sécurité RSA. Multiplier deux grands nombres premiers est facile, mais retrouver ces nombres à partir de leur produit est extrêmement difficile.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Comment fonctionne ce générateur?</h5>
+                            <p>Vous fournissez deux nombres premiers (p et q), et notre générateur calcule automatiquement :</p>
+                            <ul>
+                                <li>Le module n = p × q (utilisé dans les deux clés)</li>
+                                <li>Un exposant public e (pour chiffrer)</li>
+                                <li>Un exposant privé d (pour déchiffrer)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            <h3>Clé privée (d, n):</h3>
-            <div class="key-display" id="privateKey"></div>
-        </div>
+            <div class="card">
+                <div class="card-header">Configuration</div>
+                <div class="card-body">
+                    <div id="alertBox" class="alert"></div>
+                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label for="p">Nombre premier p:</label>
+                            <input type="number" id="p" placeholder="Ex: 61" min="2">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="q">Nombre premier q:</label>
+                            <input type="number" id="q" placeholder="Ex: 53" min="2">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>&nbsp;</label>
+                            <button id="generateBtn" class="btn btn-large" onclick="generateKeys()">Générer les clés</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('resultsTab')">Résultats</div>
+                <div class="tab" onclick="switchTab('explanationTab')">Explication technique</div>
+                <div class="tab" onclick="switchTab('simpleTab')">Guide pratique</div>
+            </div>
+            
+            <div id="resultsTab" class="tab-content active">
+                <div class="result-section">
+                    <h3 class="section-title">Paramètres de base</h3>
+                    <div class="key-display" id="baseParams"></div>
+                    
+                    <h3 class="section-title">Clé publique (e, n)</h3>
+                    <div class="key-display" id="publicKey"></div>
+                    
+                    <h3 class="section-title">Clé privée (d, n)</h3>
+                    <div class="key-display" id="privateKey"></div>
+                </div>
+            </div>
+            
+            <div id="explanationTab" class="tab-content">
+                <h3 class="section-title">Principes mathématiques du RSA</h3>
+                <div class="explanation">
+<b>FONCTIONS MATHÉMATIQUES CLÉS:</b>
 
-        <div class="explanation">
-FONCTIONS MATHÉMATIQUES CLÉS:
-
-1. Vérification de primalité (is_prime):
+1. <u>Vérification de primalité (is_prime):</u>
    - Vérifie si un nombre est premier en testant la divisibilité
    - Teste tous les entiers de 2 à √n
    - Complexité: O(√n)
 
-2. Algorithme d'Euclide étendu (extended_gcd):
+2. <u>Algorithme d'Euclide étendu (extended_gcd):</u>
    - Trouve le PGCD de deux nombres
    - Calcule les coefficients de Bézout (x, y) tels que:
      ax + by = PGCD(a, b)
    - Base pour le calcul de l'inverse modulaire
 
-3. Inverse modulaire (modinv):
+3. <u>Inverse modulaire (modinv):</u>
    - Utilise l'algorithme d'Euclide étendu
    - Trouve d tel que (e * d) ≡ 1 mod φ(n)
    - N'existe que si e et φ(n) sont premiers entre eux
 
-PROCESSUS COMPLET RSA:
+<b>PROCESSUS COMPLET RSA:</b>
 
-Étape 1: Génération de n
+<u>Étape 1: Génération de n</u>
 n = p * q (module public)
 Ex: Si p=61 et q=53 → n=3233
 
-Étape 2: Calcul de φ(n) (indicatrice d'Euler)
+<u>Étape 2: Calcul de φ(n) (indicatrice d'Euler)</u>
 φ(n) = (p-1)*(q-1)
 Ex: φ(3233) = 60*52 = 3120
 
-Étape 3: Choix de e (exposant public)
+<u>Étape 3: Choix de e (exposant public)</u>
 Conditions:
 - 1 < e < φ(n)
 - PGCD(e, φ(n)) = 1
 Valeurs courantes: 3, 5, 17, 257, 65537
 
-Étape 4: Calcul de d (exposant privé)
+<u>Étape 4: Calcul de d (exposant privé)</u>
 d ≡ e⁻¹ mod φ(n) (inverse modulaire)
 Calculé via l'algorithme d'Euclide étendu
 
-SÉCURITÉ RSA:
+<b>SÉCURITÉ RSA:</b>
 La sécurité repose sur la difficulté de factoriser n en p et q.
 Pour des clés modernes, utiliser des nombres premiers de 2048 bits ou plus.
-        </div>
+                </div>
+            </div>
+            
+            <div id="simpleTab" class="tab-content">
+                <h3 class="section-title">Comment utiliser les clés RSA?</h3>
+                
+                <div class="simple-explanation">
+                    <h4>Les clés en pratique</h4>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h5>Distribuer votre clé publique</h5>
+                            <p>Votre clé publique <strong>(e, n)</strong> peut être partagée avec n'importe qui. C'est comme votre adresse - vous pouvez la mettre sur votre site web ou la partager par email.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h5>Protéger votre clé privée</h5>
+                            <p>Votre clé privée <strong>(d, n)</strong> doit rester secrète. Ne la partagez jamais - c'est comme la clé de votre maison.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h5>Pour chiffrer un message</h5>
+                            <p>Si quelqu'un veut vous envoyer un message confidentiel, il utilise votre clé publique pour le chiffrer. Mathématiquement, cela équivaut à : <code>message_chiffré = message<sup>e</sup> mod n</code></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h5>Pour déchiffrer un message</h5>
+                            <p>Vous utilisez votre clé privée pour déchiffrer les messages que vous recevez : <code>message_original = message_chiffré<sup>d</sup> mod n</code></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Conseils pour la sécurité</h3>
+                
+                <div class="simple-explanation">
+                    <h4>Bonnes pratiques</h4>
+                    <p>Ce générateur est éducatif. Pour une utilisation réelle :</p>
+                    <ul>
+                        <li>Utilisez des nombres premiers d'au moins 1024 bits (des centaines de chiffres)</li>
+                        <li>Utilisez un logiciel cryptographique validé comme OpenSSL</li>
+                        <li>Conservez votre clé privée dans un endroit sécurisé</li>
+                        <li>Renouvelez vos clés périodiquement</li>
+                    </ul>
+                    
+                    <div class="analogy">
+                        <div class="analogy-title">Pourquoi les grands nombres sont importants</div>
+                        <p>C'est comme comparer un cadenas bon marché à un coffre-fort haute sécurité. Les petits nombres sont faciles à "cracker" pour un ordinateur moderne, tandis que les grands nombres offriraient des milliards d'années de calcul pour être déchiffrés.</p>
+                    </div>
+                </div>
+                
+                <div class="interactive-demo">
+                    <h4>Exemple concret</h4>
+                    <p>Avec p=61 et q=53 :</p>
+                    <ol>
+                        <li>Nous obtenons n = 61 × 53 = 3233</li>
+                        <li>φ(n) = (61-1) × (53-1) = 60 × 52 = 3120</li>
+                        <li>Un bon choix pour e serait 17 (premier avec 3120)</li>
+                        <li>Cela donne d = 2753 (l'inverse modulaire de 17 modulo 3120)</li>
+                        <li>Clé publique : (17, 3233)</li>
+                        <li>Clé privée : (2753, 3233)</li>
+                    </ol>
+                    <p>Ces valeurs correspondent à celles que vous obtiendrez en utilisant le générateur avec p=61 et q=53.</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            Générateur de clés RSA Professional | © 2025 | Développé pour des besoins éducatifs
+        </footer>
     </div>
 
     <script>
         function isPrime(num) {
             if (num < 2) return false;
-            if (num % 2 === 0) return num === 2;
-            for(let i = 3; i <= Math.sqrt(num); i += 2) {
-                if(num % i === 0) return false;
+            if (num === 2) return true;
+            if (num % 2 === 0) return false;
+            
+            const sqrtNum = Math.sqrt(num);
+            for (let i = 3; i <= sqrtNum; i += 2) {
+                if (num % i === 0) return false;
             }
             return true;
         }
 
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+
         function extendedGCD(a, b) {
-            if(a === 0) return [b, 0, 1];
+            if (a === 0) return [b, 0, 1];
+            
             const [g, y, x] = extendedGCD(b % a, a);
             return [g, x - Math.floor(b / a) * y, y];
         }
 
         function modinv(a, m) {
             const [g, x] = extendedGCD(a, m);
-            return g !== 1 ? null : (x % m + m) % m;
+            if (g !== 1) return null;
+            return (x % m + m) % m;
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function switchTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+            
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Activate the selected tab and content
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('active');
         }
 
         function generateKeys() {
             const p = parseInt(document.getElementById('p').value);
             const q = parseInt(document.getElementById('q').value);
-
-            if(!isPrime(p) || !isPrime(q)) {
-                alert('p et q doivent être des nombres premiers!');
+            
+            // Validate inputs
+            if (isNaN(p) || isNaN(q)) {
+                showAlert('Veuillez entrer des valeurs numériques pour p et q.', 'error');
                 return;
             }
-
-            if(p === q) {
-                alert('p et q doivent être différents!');
+            
+            if (!isPrime(p) || !isPrime(q)) {
+                showAlert('p et q doivent être des nombres premiers!', 'error');
                 return;
             }
-
+            
+            if (p === q) {
+                showAlert('p et q doivent être différents!', 'error');
+                return;
+            }
+            
             const n = p * q;
             const phi = (p - 1) * (q - 1);
-
-            // Essayer les valeurs communes de e en premier
+            
+            // Common choices for e
             const commonEs = [65537, 257, 17, 5, 3];
             let e = commonEs.find(candidate => candidate < phi && gcd(candidate, phi) === 1);
-
-            // Si aucune valeur commune ne fonctionne, chercher manuellement
-            if(!e) {
+            
+            // If no common e works, find another one
+            if (!e) {
                 e = 3;
-                while(e < phi) {
-                    if(gcd(e, phi) === 1) break;
+                while (e < phi) {
+                    if (gcd(e, phi) === 1) break;
                     e += 2;
                 }
             }
-
+            
             const d = modinv(e, phi);
-
-            if(!d) {
-                alert('Erreur dans le calcul de la clé privée!');
+            
+            if (!d) {
+                showAlert('Erreur dans le calcul de la clé privée!', 'error');
                 return;
             }
-
+            
+            // Display results
+            document.getElementById('baseParams').textContent = `p = ${p}, q = ${q}, n = ${n}, φ(n) = ${phi}`;
             document.getElementById('publicKey').textContent = `(${e}, ${n})`;
             document.getElementById('privateKey').textContent = `(${d}, ${n})`;
-        }
-
-        function gcd(a, b) {
-            return b === 0 ? a : gcd(b, a % b);
+            
+            showAlert('Clés RSA générées avec succès!', 'success');
+            
+            // Switch to results tab
+            switchTab('resultsTab');
         }
     </script>
 </body>

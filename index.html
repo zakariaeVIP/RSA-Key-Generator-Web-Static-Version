@@ -181,17 +181,6 @@
             display: block;
         }
         
-        .explanation {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 4px;
-            font-family: 'Roboto Mono', monospace;
-            line-height: 1.6;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-        }
-        
         .section-title {
             color: var(--primary-color);
             border-bottom: 2px solid #eee;
@@ -289,6 +278,110 @@
             padding: 1.5rem;
             border-radius: 8px;
             margin: 1.5rem 0;
+        }
+        
+        .tech-card {
+            background-color: #f5f7ff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .tech-card-header {
+            background-color: #3949ab;
+            color: white;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .tech-card-body {
+            padding: 1.5rem;
+        }
+        
+        .tech-step {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        
+        .tech-step-number {
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            background-color: #3949ab;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .tech-step-title {
+            color: #3949ab;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .tech-step-content {
+            color: #424242;
+        }
+        
+        .key-role {
+            display: flex;
+            align-items: center;
+            background: #e8eaf6;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .key-icon {
+            margin-right: 1rem;
+            background: #3949ab;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .key-info h5 {
+            margin: 0 0 0.3rem 0;
+            color: #3949ab;
+        }
+        
+        .key-info p {
+            margin: 0;
+            color: #424242;
+        }
+        
+        .formula {
+            font-family: 'Cambria Math', Georgia, serif;
+            background-color: #f1f8e9;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+        
+        .example {
+            background-color: #e1f5fe;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            font-style: italic;
+            color: #01579b;
         }
         
         @media (max-width: 768px) {
@@ -397,6 +490,112 @@
                     
                     <h3 class="section-title">Clé privée (d, n)</h3>
                     <div class="key-display" id="privateKey"></div>
+                </div>
+            </div>
+            
+            <div id="explanationTab" class="tab-content">
+                <h3 class="section-title">Principes du chiffrement RSA</h3>
+                
+                <div class="tech-card">
+                    <div class="tech-card-header">Étapes de génération RSA</div>
+                    <div class="tech-card-body">
+                        <div class="tech-step">
+                            <div class="tech-step-number">1</div>
+                            <div class="tech-step-title">Calcul de n = p × q</div>
+                            <div class="tech-step-content">
+                                <p>On multiplie deux nombres premiers distincts p et q pour obtenir le module n.</p>
+                                <div class="example">Exemple: Si p=61 et q=53 → n=3233</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-step">
+                            <div class="tech-step-number">2</div>
+                            <div class="tech-step-title">Calcul de φ(n) = (p-1) × (q-1)</div>
+                            <div class="tech-step-content">
+                                <p>On calcule l'indicatrice d'Euler φ(n) qui représente le nombre d'entiers positifs inférieurs à n et premiers avec n.</p>
+                                <div class="example">Exemple: φ(3233) = 60 × 52 = 3120</div>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-step">
+                            <div class="tech-step-number">3</div>
+                            <div class="tech-step-title">Choix de e tel que:</div>
+                            <div class="tech-step-content">
+                                <p>L'exposant public e doit respecter deux conditions:</p>
+                                <ul>
+                                    <li>1 < e < φ(n)</li>
+                                    <li>PGCD(e, φ(n)) = 1 (e et φ(n) sont premiers entre eux)</li>
+                                </ul>
+                                <p>Valeurs courantes pour e: 3, 5, 17, 257, 65537</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-step">
+                            <div class="tech-step-number">4</div>
+                            <div class="tech-step-title">Calcul de d tel que e × d ≡ 1 mod φ(n)</div>
+                            <div class="tech-step-content">
+                                <p>On calcule l'exposant privé d comme l'inverse modulaire de e modulo φ(n).</p>
+                                <div class="formula">d ≡ e<sup>-1</sup> mod φ(n)</div>
+                                <p>Cette opération utilise l'algorithme d'Euclide étendu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Rôles des clés</h3>
+                
+                <div class="key-role">
+                    <div class="key-icon">🔓</div>
+                    <div class="key-info">
+                        <h5>Clé publique (e, n)</h5>
+                        <p>Utilisée pour chiffrer les messages. Cette clé peut être partagée avec tout le monde.</p>
+                        <div class="formula">message_chiffré = message<sup>e</sup> mod n</div>
+                    </div>
+                </div>
+                
+                <div class="key-role">
+                    <div class="key-icon">🔐</div>
+                    <div class="key-info">
+                        <h5>Clé privée (d, n)</h5>
+                        <p>Utilisée pour déchiffrer les messages. Cette clé doit rester secrète.</p>
+                        <div class="formula">message_original = message_chiffré<sup>d</sup> mod n</div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Algorithmes sous-jacents</h3>
+                
+                <div class="tech-card">
+                    <div class="tech-card-header">Fonctions mathématiques essentielles</div>
+                    <div class="tech-card-body">
+                        <div class="tech-step">
+                            <div class="tech-step-number">1</div>
+                            <div class="tech-step-title">Vérification de primalité</div>
+                            <div class="tech-step-content">
+                                <p>Vérifie si un nombre est premier en testant la divisibilité par tous les entiers de 2 à √n.</p>
+                                <p>Complexité: O(√n)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-step">
+                            <div class="tech-step-number">2</div>
+                            <div class="tech-step-title">Algorithme d'Euclide étendu</div>
+                            <div class="tech-step-content">
+                                <p>Trouve le PGCD de deux nombres et calcule les coefficients de Bézout (x, y) tels que:</p>
+                                <div class="formula">ax + by = PGCD(a, b)</div>
+                                <p>Sert de base pour le calcul de l'inverse modulaire.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tech-step">
+                            <div class="tech-step-number">3</div>
+                            <div class="tech-step-title">Inverse modulaire</div>
+                            <div class="tech-step-content">
+                                <p>Utilise l'algorithme d'Euclide étendu pour trouver d tel que:</p>
+                                <div class="formula">(e × d) ≡ 1 mod φ(n)</div>
+                                <p>L'inverse modulaire n'existe que si e et φ(n) sont premiers entre eux.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -571,21 +770,4 @@
             
             const d = modinv(e, phi);
             
-            if (!d) {
-                showAlert('Erreur dans le calcul de la clé privée!', 'error');
-                return;
-            }
-            
-            // Display results
-            document.getElementById('baseParams').textContent = `p = ${p}, q = ${q}, n = ${n}, φ(n) = ${phi}`;
-            document.getElementById('publicKey').textContent = `(${e}, ${n})`;
-            document.getElementById('privateKey').textContent = `(${d}, ${n})`;
-            
-            showAlert('Clés RSA générées avec succès!', 'success');
-            
-            // Switch to results tab
-            switchTab('resultsTab');
-        }
-    </script>
-</body>
-</html>
+            if (!

@@ -400,53 +400,6 @@
                 </div>
             </div>
             
-            <div id="explanationTab" class="tab-content">
-                <h3 class="section-title">Principes mathématiques du RSA</h3>
-                <div class="explanation">
-<b>FONCTIONS MATHÉMATIQUES CLÉS:</b>
-
-1. <u>Vérification de primalité (is_prime):</u>
-   - Vérifie si un nombre est premier en testant la divisibilité
-   - Teste tous les entiers de 2 à √n
-   - Complexité: O(√n)
-
-2. <u>Algorithme d'Euclide étendu (extended_gcd):</u>
-   - Trouve le PGCD de deux nombres
-   - Calcule les coefficients de Bézout (x, y) tels que:
-     ax + by = PGCD(a, b)
-   - Base pour le calcul de l'inverse modulaire
-
-3. <u>Inverse modulaire (modinv):</u>
-   - Utilise l'algorithme d'Euclide étendu
-   - Trouve d tel que (e * d) ≡ 1 mod φ(n)
-   - N'existe que si e et φ(n) sont premiers entre eux
-
-<b>PROCESSUS COMPLET RSA:</b>
-
-<u>Étape 1: Génération de n</u>
-n = p * q (module public)
-Ex: Si p=61 et q=53 → n=3233
-
-<u>Étape 2: Calcul de φ(n) (indicatrice d'Euler)</u>
-φ(n) = (p-1)*(q-1)
-Ex: φ(3233) = 60*52 = 3120
-
-<u>Étape 3: Choix de e (exposant public)</u>
-Conditions:
-- 1 < e < φ(n)
-- PGCD(e, φ(n)) = 1
-Valeurs courantes: 3, 5, 17, 257, 65537
-
-<u>Étape 4: Calcul de d (exposant privé)</u>
-d ≡ e⁻¹ mod φ(n) (inverse modulaire)
-Calculé via l'algorithme d'Euclide étendu
-
-<b>SÉCURITÉ RSA:</b>
-La sécurité repose sur la difficulté de factoriser n en p et q.
-Pour des clés modernes, utiliser des nombres premiers de 2048 bits ou plus.
-                </div>
-            </div>
-            
             <div id="simpleTab" class="tab-content">
                 <h3 class="section-title">Comment utiliser les clés RSA?</h3>
                 

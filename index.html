@@ -770,4 +770,22 @@
             
             const d = modinv(e, phi);
             
-            if (!
+            if (!d) {
+                showAlert('Erreur dans le calcul de la clé privée!', 'error');
+                return;
+            }
+            
+            // Display results
+            document.getElementById('baseParams').textContent = `p = ${p}, q = ${q}, n = ${n}, φ(n) = ${phi}`;
+            document.getElementById('publicKey').textContent = `(${e}, ${n})`;
+            document.getElementById('privateKey').textContent = `(${d}, ${n})`;
+            
+            showAlert('Clés RSA générées avec succès!', 'success');
+            
+            // Switch to results tab
+            switchTab('resultsTab');
+        }
+    </script>
+</body>
+</html>
+

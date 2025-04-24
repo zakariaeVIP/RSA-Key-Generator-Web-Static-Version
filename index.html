@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Générateur de clés RSA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+            width: 100px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .result-section {
+            margin: 20px 0;
+        }
+
+        .explanation {
+            background: #fff9e6;
+            padding: 15px;
+            border-left: 4px solid #ffeb3b;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .key-display {
+            background: #e8f5e9;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Générateur de clés RSA</h1>
+        
+        <div class="input-section">
+            <label>Nombre premier p: <input type="number" id="p"></label>
+            <label>Nombre premier q: <input type="number" id="q"></label>
+            <button onclick="generateKeys()">Générer les clés</button>
+        </div>
+
+        <div class="result-section">
+            <h3>Clé publique (e, n):</h3>
+            <div class="key-display" id="publicKey"></div>
+            
+            <h3>Clé privée (d, n):</h3>
+            <div class="key-display" id="privateKey"></div>
+        </div>
+
+        <div class="explanation">
+FONCTIONS MATHÉMATIQUES CLÉS:
+
+1. Vérification de primalité (is_prime):
+   - Vérifie si un nombre est premier en testant la divisibilité
+   - Teste tous les entiers de 2 à √n
+   - Complexité: O(√n)
+
+2. Algorithme d'Euclide étendu (extended_gcd):
+   - Trouve le PGCD de deux nombres
+   - Calcule les coefficients de Bézout (x, y) tels que:
+     ax + by = PGCD(a, b)
+   - Base pour le calcul de l'inverse modulaire
+
+3. Inverse modulaire (modinv):
+   - Utilise l'algorithme d'Euclide étendu
+   - Trouve d tel que (e * d) ≡ 1 mod φ(n)
+   - N'existe que si e et φ(n) sont premiers entre eux
+
+PROCESSUS COMPLET RSA:
+
+Étape 1: Génération de n
+n = p * q (module public)
+Ex: Si p=61 et q=53 → n=3233
+
+Étape 2: Calcul de φ(n) (indicatrice d'Euler)
+φ(n) = (p-1)*(q-1)
+Ex: φ(3233) = 60*52 = 3120
+
+Étape 3: Choix de e (exposant public)
+Conditions:
+- 1 < e < φ(n)
+- PGCD(e, φ(n)) = 1
+Valeurs courantes: 3, 5, 17, 257, 65537
+
+Étape 4: Calcul de d (exposant privé)
+d ≡ e⁻¹ mod φ(n) (inverse modulaire)
+Calculé via l'algorithme d'Euclide étendu
+
+SÉCURITÉ RSA:
+La sécurité repose sur la difficulté de factoriser n en p et q.
+Pour des clés modernes, utiliser des nombres premiers de 2048 bits ou plus.
+        </div>
+    </div>
+
+    <script>
+        function isPrime(num) {
+            if (num < 2) return false;
+            if (num % 2 === 0) return num === 2;
+            for(let i = 3; i <= Math.sqrt(num); i += 2) {
+                if(num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function extendedGCD(a, b) {
+            if(a === 0) return [b, 0, 1];
+            const [g, y, x] = extendedGCD(b % a, a);
+            return [g, x - Math.floor(b / a) * y, y];
+        }
+
+        function modinv(a, m) {
+            const [g, x] = extendedGCD(a, m);
+            return g !== 1 ? null : (x % m + m) % m;
+        }
+
+        function generateKeys() {
+            const p = parseInt(document.getElementById('p').value);
+            const q = parseInt(document.getElementById('q').value);
+
+            if(!isPrime(p) || !isPrime(q)) {
+                alert('p et q doivent être des nombres premiers!');
+                return;
+            }
+
+            if(p === q) {
+                alert('p et q doivent être différents!');
+                return;
+            }
+
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+
+            // Essayer les valeurs communes de e en premier
+            const commonEs = [65537, 257, 17, 5, 3];
+            let e = commonEs.find(candidate => candidate < phi && gcd(candidate, phi) === 1);
+
+            // Si aucune valeur commune ne fonctionne, chercher manuellement
+            if(!e) {
+                e = 3;
+                while(e < phi) {
+                    if(gcd(e, phi) === 1) break;
+                    e += 2;
+                }
+            }
+
+            const d = modinv(e, phi);
+
+            if(!d) {
+                alert('Erreur dans le calcul de la clé privée!');
+                return;
+            }
+
+            document.getElementById('publicKey').textContent = `(${e}, ${n})`;
+            document.getElementById('privateKey').textContent = `(${d}, ${n})`;
+        }
+
+        function gcd(a, b) {
+            return b === 0 ? a : gcd(b, a % b);
+        }
+    </script>
+</body>
+</html>
